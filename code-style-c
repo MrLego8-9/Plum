@@ -1,0 +1,19 @@
+#!/bin/bash
+excluded_dirs="./tests|./bonus|./.git"
+exclude_gitignore=""
+if [ -f .gitignore ]; then
+exclude_gitignore=".gitignore"
+gitignore_dirs=$(cat .gitignore | grep "/$" | tr '\n' '|')
+excluded_dirs+="|"
+excluded_dirs+=${gitignore_dirs%|*}
+fi
+lines=$(find -L . -type f | grep -Ev "^($excluded_dirs).*" | vera++ --profile epitech -d --exclusions "$exclude_gitignore" | sed "s/ //g")
+for line in $lines; do
+    echo "$(echo "$line" | cut -d: -f1): $(echo "$line" | cut -d: -f2): $(echo "$line" | cut -d: -f3): $(cat /usr/local/lib/vera++/code_to_comment | grep $(echo "$line" | cut -d: -f4) | sed 's/:/: /g')"
+done
+if [ "$lines" != "" ]; then
+nblines=$(echo "$lines" | wc -l)
+echo "Found $nblines errors"
+else
+echo "No errors found"
+fi

@@ -1,0 +1,3 @@
+#!/bin/bash
+/opt/plum-coding-style/code-style-c
+/opt/plum-coding-style/code-style-haskell

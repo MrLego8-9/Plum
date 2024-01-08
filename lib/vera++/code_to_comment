@@ -1,0 +1,35 @@
+C-A3:file not ending with a line break (\\n)
+C-C1:conditional block with more than 3 branches, or at a nesting level of 3 or more
+C-C2:abusive ternary operator usage
+C-C3:use of "goto" keyword
+C-F2:function name not following the snake_case convention
+C-F3:line of more than 80 columns
+C-F4:line part of a function with more than 20 lines
+C-F5:function with more than 4 parameters
+C-F6:function with empty parameter list
+C-F7:structure parameter received by copy
+C-F8:comment inside function
+C-F9:nested function defined
+C-G1:file not starting with correctly formatted Epitech standard header
+C-G2:zero, two, or more empty lines separating implementations of functions
+C-G3:bad indentation of preprocessor directive
+C-G4:global variable used
+C-G5:"include" directive used to include file other than a header
+C-G6:carriage return character (\\r) used
+C-G7:trailing space
+C-G8:leading or trailing empty line
+C-G10:use of inline assembly
+C-H1:bad separation between source file and header file
+C-H2:header file not protected against double inclusion
+C-H3:abusive macro usage
+C-L1:multiple statements on the same line
+C-L2:bad indentation at the start of a line
+C-L3:misplaced or missing space(s)
+C-L4:misplaced curly bracket
+C-L5:variable not declared at the beginning of the function or several declarations with the same statement
+C-L6:missing blank line after variable declarations or unnecessary blank line
+C-O1:compiled, temporary or unnecessary file
+C-O3:more than 10 functions or more than 5 non-static functions in the file
+C-O4:file name not following the snake_case convention
+C-V1:identifier name not following the snake_case convention
+C-V3:misplaced pointer symbol

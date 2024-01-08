@@ -1,0 +1,5 @@
+#!/bin/bash
+
+excluded_dirs="Setup.hs:setup.hs:.git:.stack-work:test:tests:bonus"
+lambdananas -o vera --exclude "$excluded_dirs" .
+
