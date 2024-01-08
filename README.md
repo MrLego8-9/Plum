@@ -5,5 +5,14 @@ De-Dockerized coding style checker for Epitech projects
 ## Install
 
 ```sh
-git clone https://github.com/LouisDupraz/Plum.git && cd Plum && ./plum_install.sh
+curl https://raw.githubusercontent.com/LouisDupraz/Plum/main/plum_install.sh | bash
+```
+
+## Usage
+
+```sh
+plum [OPTIONS]
+
+Options:
+  --update  Update plum
 ```
