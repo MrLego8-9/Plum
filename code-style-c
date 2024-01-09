@@ -1,13 +1,13 @@
 #!/bin/bash
 excluded_dirs="./tests|./bonus|./.git"
-exclude_gitignore=""
-if [ -f .gitignore ]; then
-exclude_gitignore="--exclusions .gitignore"
-gitignore_dirs=$(cat .gitignore | grep "/$" | tr '\n' '|')
-excluded_dirs+="|"
-excluded_dirs+=${gitignore_dirs%|*}
+exclude_gitignore="n"
+if [ -f .gitignore ] && [ "$1" != "--ignore-gitignore" ]; then
+exclude_gitignore="y"
 fi
-lines=$(find -L . -type f | grep -Ev "^($excluded_dirs).*" | vera++ --profile epitech -d $exclude_gitignore | sed "s/ //g")
+lines=$(find -L . -type f | grep -Ev "^($excluded_dirs).*" | vera++ --profile epitech -d  | sed "s/ //g")
+if [ "$exclude_gitignore" == "y" ]; then
+    lines=$(echo "$lines" | grep -vf .gitignore)
+fi
 for line in $lines; do
     echo "$(echo "$line" | cut -d: -f1): $(echo "$line" | cut -d: -f2): $(echo "$line" | cut -d: -f3): $(cat /usr/local/lib/vera++/code_to_comment | grep $(echo "$line" | cut -d: -f4) | sed 's/:/: /g')"
 done

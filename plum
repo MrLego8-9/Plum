@@ -1,12 +1,19 @@
 #!/bin/bash
+
+csc=""
+csh=""
+
+
 if [ "$#" == "1" ]; then
   if [ "$1" == "--update" ]; then
     /opt/plum-coding-style/plum_update.sh
     exit 0
+  elif [ "$1" == "--ignore-gitignore" ]; then
+    csc+=" --ignore-gitignore"
   else
     echo -e "Usage: plum [OPTION]\n\nOptions:\n  --update\tUpdate Plum"
     exit 1
   fi
 fi
-/opt/plum-coding-style/code-style-c
-/opt/plum-coding-style/code-style-haskell
+/opt/plum-coding-style/code-style-c $csc
+/opt/plum-coding-style/code-style-haskell $csc

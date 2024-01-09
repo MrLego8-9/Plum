@@ -57,6 +57,7 @@ sudo cp plum /bin
 sudo mkdir -p /opt/plum-coding-style
 sudo cp code-style* /opt/plum-coding-style/
 sudo cp VERSION /opt/plum-coding-style/
+sudo cp plum_update.sh /opt/plum-coding-style/
 
 sudo cp -r /tmp/docker-volume/vera++ /usr/local/lib
 sudo cp /tmp/docker-volume/lambdananas /bin
