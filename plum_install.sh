@@ -8,12 +8,12 @@ else
 echo -e "Installing luabind from AUR\n\n"
 
 cd /tmp
-sudo m -rf luabind/
+sudo rm -rf luabind/
 git clone https://github.com/ryzom/luabind.git
 mkdir luabind/build
 cd luabind/build
-cmake -DLUABIND_DYNAMIC_LINK=ON -DCMAKE_INSTALL_PREFIX=/usr ..
-make DESTDIR="/" install
+sudo cmake -DLUABIND_DYNAMIC_LINK=ON -DCMAKE_INSTALL_PREFIX=/usr ..
+sudo make DESTDIR="/" install
 cd /usr/lib
 sudo ln -s libluabind09.so libluabind.so
 sudo rm -rf /tmp/luabind
