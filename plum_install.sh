@@ -1,5 +1,5 @@
 #!/bin/bash
-
+sudo rm -rf /tmp/Plum
 git clone https://github.com/LouisDupraz/Plum.git /tmp/Plum
 
 if [ -f /usr/lib/libluabind.so ]; then
@@ -8,7 +8,7 @@ else
 echo -e "Installing luabind from AUR\n\n"
 
 cd /tmp
-rm -rf luabind/
+sudo m -rf luabind/
 git clone https://github.com/ryzom/luabind.git
 mkdir luabind/build
 cd luabind/build
@@ -16,14 +16,14 @@ cmake -DLUABIND_DYNAMIC_LINK=ON -DCMAKE_INSTALL_PREFIX=/usr ..
 make DESTDIR="/" install
 cd /usr/lib
 sudo ln -s libluabind09.so libluabind.so
-rm -rf /tmp/luabind
+sudo rm -rf /tmp/luabind
 echo ""
 fi
 
 echo -e "\nBuilding Banana Vera++\n\n"
 
 cd /tmp
-rm -rf banana-vera/
+sudo rm -rf banana-vera/
 git clone https://github.com/Epitech/banana-vera.git
 cd banana-vera
 boost_version=$(cat src/boost.cmake | grep "set(Boost_VERSION " | cut -d' ' -f4 | sed 's/)//g')
@@ -44,12 +44,12 @@ echo -e "\n\nInstalling Plum\n\n"
 
 cd /tmp/Plum
 
-rm -rf /tmp/docker-volume/
+sudo rm -rf /tmp/docker-volume/
 mkdir -p /tmp/docker-volume/
 
 echo -e "#!/bin/bash\ncp /usr/local/bin/lambdananas /mounted-dir\ncp -r /usr/local/lib/vera++ /mounted-dir" > /tmp/docker-volume/copy.sh
 chmod +x /tmp/docker-volume/copy.sh
-docker run -it --name code-style-tmp -v /tmp/docker-volume:/mounted-dir --entrypoint='/mounted-dir/copy.sh' ghcr.io/epitech/coding-style-checker:latest
+docker run --name code-style-tmp -v /tmp/docker-volume:/mounted-dir --entrypoint='/mounted-dir/copy.sh' ghcr.io/epitech/coding-style-checker:latest
 docker rm code-style-tmp > /dev/null
 
 sudo cp plum /bin
@@ -58,7 +58,7 @@ sudo mkdir -p /opt/plum-coding-style
 sudo cp code-style* /opt/plum-coding-style/
 sudo cp VERSION /opt/plum-coding-style/
 
-sudo cp -r /tmp/mounted-dir/vera++ /usr/local/lib
-sudo cp /tmp/mounted-dir/lambdananas /bin
+sudo cp -r /tmp/docker-volume/vera++ /usr/local/lib
+sudo cp /tmp/docker-volume/lambdananas /bin
 
 sudo rm -rf /tmp/docker-volume/
