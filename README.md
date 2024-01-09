@@ -7,6 +7,11 @@ De-Dockerized coding style checker for Epitech projects
 ```sh
 curl https://raw.githubusercontent.com/LouisDupraz/Plum/main/plum_install.sh | bash
 ```
+### Requires
+- Python3
+- Boost libs
+- Lua
+- Docker
 
 ## Usage
 
@@ -16,3 +21,4 @@ plum [OPTIONS]
 Options:
   --update  Update plum
 ```
+
