@@ -11,7 +11,7 @@ curl https://raw.githubusercontent.com/LouisDupraz/Plum/main/plum_install.sh | b
 - Python3
 - Boost libs
 - Lua
-- Docker
+- Docker (Only for installation)
 
 ## Usage
 
