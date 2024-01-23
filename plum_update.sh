@@ -8,7 +8,7 @@ if [ "$#" == "1" ]; then
 
     echo -e "\nUpdating Rules"
 
-    cd /tmp/Plum
+    cd /tmp/Plum || exit 1
 
     sudo rm -rf /tmp/docker-volume/
     mkdir -p /tmp/docker-volume/
@@ -37,10 +37,10 @@ curr_version="$(cat /opt/plum-coding-style/VERSION)"
 upstream_version="$(curl -s https://raw.githubusercontent.com/LouisDupraz/Plum/main/VERSION)"
 
 if [ "$curr_version" != "$upstream_version" ]; then
-  echo -e "Updating Plum\n\n"
+  printf "Updating Plum\n\n"
   curl https://raw.githubusercontent.com/LouisDupraz/Plum/main/plum_install.sh | bash
+  exit 0
 else
-  echo -e "Plum is up to date\n"
+  printf "Plum is up to date\n"
+  exit 0
 fi
-
-exit 0

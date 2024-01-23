@@ -18,5 +18,4 @@ if [ "$#" == "1" ]; then
     exit 1
   fi
 fi
-/opt/plum-coding-style/code-style-c $csc
-/opt/plum-coding-style/code-style-haskell $csc
+/opt/plum-coding-style/code-style-checker $csc
