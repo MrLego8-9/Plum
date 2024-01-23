@@ -8,10 +8,11 @@ import fnmatch
 
 def getIgnoredFiles():
     os.system("git check-ignore $(find . -type f -print) > .plumignore 2> /dev/null")
-    with open(".plumignore", "r") as file:
-        ignored_files = file.readlines()
+    with open(".plumignore", "r") as f:
+        ignored_files = f.readlines()
     os.system("rm -f .plumignore")
     return [line.replace("\n", "") for line in ignored_files]
+
 
 args = sys.argv[1:]
 ignore_gitignore = "--ignore-gitignore" in args

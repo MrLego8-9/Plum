@@ -8,6 +8,9 @@ if [ "$#" == "1" ]; then
   if [ "$1" == "--update" ]; then
     /opt/plum-coding-style/plum_update.sh
     exit 0
+  elif [ "$1" == "--update-rules" ]; then
+    /opt/plum-coding-style/plum_update.sh --update-rules
+    exit 0
   elif [ "$1" == "--ignore-gitignore" ]; then
     csc+=" --ignore-gitignore"
   else
