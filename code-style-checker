@@ -15,11 +15,11 @@ if errors_sum == 0:
     print("No errors found")
     exit(0)
 
-if c_results > 0:
+if c_results[0] > 0:
     print("\n\033[96;1mC Style results\033[0m\n")
     print(c_results[1])
 
-if c_results > 0:
+if haskell_results[0] > 0:
     print("\n\033[96;1mHaskell Style results\033[0m\n")
     print(haskell_results[1])
 err = "errors" if errors_sum > 1 else "error"
