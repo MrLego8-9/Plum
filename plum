@@ -14,7 +14,7 @@ if [ "$#" == "1" ]; then
   elif [ "$1" == "--ignore-gitignore" ]; then
     csc+=" --ignore-gitignore"
   else
-    echo -e "Usage: plum [OPTION]\n\nOptions:\n  --update\tUpdate Plum"
+    echo -e "Usage: plum [OPTION]\n\nOptions:\n  --update\tUpdate Plum\n  --update-rules\tUpdate Coding Style Rules\n  --ignore-gitignore\tIgnore files in .gitignore\n"
     exit 1
   fi
 fi
