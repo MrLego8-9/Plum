@@ -32,7 +32,7 @@ def checkHaskellCodingStyle(args):
         else:
             split_line[-2] = "\033[90;1m" + split_line[-2] + "\033[0m"
 
-        vera_result[i] = ": ".join(split_line)
+        vera_result[i] = ": ".join(split_line) + "\n"
 
     return nb_errors, "".join(vera_result)
     #if nb_errors == 0:
