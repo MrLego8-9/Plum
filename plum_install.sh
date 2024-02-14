@@ -2,30 +2,19 @@
 sudo rm -rf /tmp/Plum
 git clone https://github.com/LouisDupraz/Plum.git /tmp/Plum
 
-if [ -f /usr/lib/libluabind.so ]; then
-echo ""
-else
-echo -e "Installing luabind from AUR\n\n"
-
-cd /tmp
-sudo rm -rf luabind/
-git clone https://github.com/ryzom/luabind.git
-mkdir luabind/build
-cd luabind/build
-sudo cmake -DLUABIND_DYNAMIC_LINK=ON -DCMAKE_INSTALL_PREFIX=/usr ..
-sudo make DESTDIR="/" install
-cd /usr/lib
-sudo ln -s libluabind09.so libluabind.so
-sudo rm -rf /tmp/luabind
-echo ""
-fi
-
 echo -e "\nBuilding Banana Vera++\n\n"
 
 cd /tmp
 sudo rm -rf banana-vera/
 git clone https://github.com/Epitech/banana-vera.git
 cd banana-vera
+
+if [ -f /bin/dnf ]; then
+  sudo dnf install -y tcl-devel boost-devel git cmake make gcc-c++ python3-devel which
+  echo -e "pylint==2.17.5\nlibclang==16.0.6" > requirements.txt
+  sudo pip install -r requirements.txt
+fi
+
 boost_version=$(cat src/boost.cmake | grep "set(Boost_VERSION " | cut -d' ' -f4 | sed 's/)//g')
 boost_mirror=$(cat src/boost.cmake | grep "set(BOOST_MIRROR" | cut -d' ' -f4)
 new_boost_mirror=$(echo $boost_mirror | sed "s|$boost_mirror|netcologne.dl.sourceforge.net|g")
@@ -35,9 +24,10 @@ new_boost_url=$(echo 'https://${BOOST_MIRROR}/project/boost/boost/'"$boost_versi
 sed -i "s|$boost_mirror|$new_boost_mirror|g" src/boost.cmake
 sed -i "s|$boost_url|$new_boost_url|g" src/boost.cmake
 
-cmake -B build . > /dev/null
+cmake -B build . -DVERA_LUA=OFF -DPANDOC=OFF -DVERA_USE_SYSTEM_BOOST=ON > /dev/null
 cmake --build build -j12 > /dev/null
 sudo cp build/src/vera++ /usr/local/bin/
+
 
 
 echo -e "\n\nInstalling Plum\n\n"
