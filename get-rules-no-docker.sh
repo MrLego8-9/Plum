@@ -11,5 +11,7 @@ if [ "$#" == "1" ]; then
     make
 
     sudo cp lambdananas /bin
+    sudo rm -rf /tmp/banana-coding-style-checker
+    sudo rm -rf /tmp/lambdananas
   fi
 fi
