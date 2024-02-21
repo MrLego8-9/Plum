@@ -40,6 +40,7 @@ def checkCCodingStyle(args):
 
     nb_errors = len(vera_result)
     for i in range(nb_errors):
+        special_msg = False
         split_line = vera_result[i].split(":")
         if split_line[-2] == " MAJOR":
             split_line[-2] = "\033[91;1m MAJOR\033[0m"
@@ -48,13 +49,16 @@ def checkCCodingStyle(args):
         elif split_line[-2] == " INFO":
             split_line[-2] = "\033[96;1m INFO\033[0m"
         else:
-            split_line[-2] = "\033[90;1m" + split_line[-2] + "\033[0m"
+            special_msg = True
+            split_line[-2] = "\033[90;1m" + split_line[-2]
 
         for rule in c2c:
             if rule.split(":")[0] == split_line[-1]:
                 split_line[-1] = ": ".join(rule.split(":"))
                 break
         vera_result[i] = ": ".join(split_line)
+        if special_msg:
+            vera_result[i] += "\033[0m\n"
 
     return nb_errors, "".join(vera_result)
     #if nb_errors == 0:
