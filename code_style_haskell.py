@@ -34,7 +34,7 @@ def checkHaskellCodingStyle(args):
 
         vera_result[i] = ": ".join(split_line) + "\n"
 
-    return nb_errors, "".join(vera_result)
+    return nb_errors, "".join(vera_result), nb_errors != 0
     #if nb_errors == 0:
     #    print("No errors found")
     #elif nb_errors == 1:

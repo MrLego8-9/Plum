@@ -39,6 +39,7 @@ def checkCCodingStyle(args):
         c2c = c2c_file.readlines()
 
     nb_errors = len(vera_result)
+    nb_true_errors = nb_errors
     for i in range(nb_errors):
         special_msg = False
         split_line = vera_result[i].split(":")
@@ -59,8 +60,9 @@ def checkCCodingStyle(args):
         vera_result[i] = ": ".join(split_line)
         if special_msg:
             vera_result[i] += "\033[0m\n"
+            nb_true_errors -= 1
 
-    return nb_errors, "".join(vera_result)
+    return nb_true_errors, "".join(vera_result), nb_errors != 0
     #if nb_errors == 0:
     #    print("No errors found")
     #elif nb_errors == 1:
