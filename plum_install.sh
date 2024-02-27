@@ -23,7 +23,7 @@ boost_file="boost_$(echo "$boost_version" | tr '.' '_').tar.bz2"
 new_boost_url=$(echo 'https://${BOOST_MIRROR}/project/boost/boost/'"$boost_version/$boost_file")
 sed -i "s|$boost_mirror|$new_boost_mirror|g" src/boost.cmake
 sed -i "s|$boost_url|$new_boost_url|g" src/boost.cmake
-sed -i 's|add_executable(vera ${srcs})|add_executable(vera ${srcs})\ntarget_compile_options(vera -O3 -march=native)|g' src/CMakeLists.txt
+sed -i 's|add_executable(vera ${srcs})|add_executable(vera ${srcs})\ntarget_compile_options(vera PRIVATE\n  -O3\n  -march=native\n)|g' src/CMakeLists.txt
 
 cmake -B build . -DVERA_LUA=OFF -DPANDOC=OFF -DVERA_USE_SYSTEM_BOOST=ON > /dev/null
 cmake --build build -j12 > /dev/null
