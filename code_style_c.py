@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import fnmatch
+from multiprocessing import Pool, cpu_count
 
 
 def getIgnoredFiles():
@@ -11,7 +12,16 @@ def getIgnoredFiles():
     with open(".plumignore", "r") as f:
         ignored_files = f.readlines()
     os.system("rm -f .plumignore")
-    return [line.replace("\n", "") for line in ignored_files]
+    return [line.strip() for line in ignored_files]
+
+
+def process_files_chunk(files_chunk):
+    vera_results = []
+    files_to_check = ("\n".join(files_chunk)).encode('utf-8')
+    result = subprocess.run(['vera++', '--profile', 'epitech', '-d'], input=files_to_check, stdout=subprocess.PIPE)
+    if result.stdout:
+        vera_results = result.stdout.decode('utf-8').strip().split("\n")
+    return vera_results
 
 
 def checkCCodingStyle(args):
@@ -23,22 +33,30 @@ def checkCCodingStyle(args):
     included_files = []
 
     for root, dirs, files in os.walk(".", followlinks=True):
-        # Exclude specified directories
         dirs[:] = [d for d in dirs if os.path.join(root, d) not in excluded_dirs]
         for file in files:
             filepath = os.path.join(root, file)
-            # Check if file matches any exclude pattern
             if not any(fnmatch.fnmatch(filepath, pattern) for pattern in excluded_dirs) and filepath not in excluded_files:
                 included_files.append(filepath)
 
-    files_to_check = ("\n".join(included_files)).encode('utf-8')
+    nb_files = len(included_files)
+    num_cores = max(1, min(nb_files // 5, cpu_count()))  # Half the number of CPU cores, but at least 1
+    chunk_size = max(1, nb_files // num_cores)
 
-    vera_result = subprocess.run(['vera++', '--profile', 'epitech', '-d'], input=files_to_check, stdout=subprocess.PIPE).stdout.decode('utf-8').split("\n")[:-1]
+    # Splitting files into chunks
+    files_chunks = [included_files[i:i + chunk_size] for i in range(0, len(included_files), chunk_size)]
+
+    # Process each chunk in parallel
+    with Pool(processes=num_cores) as pool:
+        results = pool.map(process_files_chunk, files_chunks)
+
+    # Flatten the list of results
+    vera_result = [item for sublist in results for item in sublist]
+    nb_errors = len(vera_result)
 
     with open("/usr/local/lib/vera++/code_to_comment", "r") as c2c_file:
         c2c = c2c_file.readlines()
 
-    nb_errors = len(vera_result)
     nb_true_errors = nb_errors
     for i in range(nb_errors):
         special_msg = False
