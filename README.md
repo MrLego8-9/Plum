@@ -8,10 +8,22 @@ De-Dockerized coding style checker for Epitech projects
 curl https://raw.githubusercontent.com/LouisDupraz/Plum/main/plum_install.sh | bash
 ```
 ### Requires
+- Git
+- Make
+- GCC / G++
+- CMake
 - Python3
+- Pip
+- Pylint
+- TCL
 - Boost libs
-- Lua
 - Docker (Only for installation)
+
+### Supported Linux distributions
+The current installer script will install the required dependencies for the following distributions:
+- Ubuntu (Untested)
+- Fedora
+- Arch
 
 ## Usage
 
@@ -20,5 +32,13 @@ plum [OPTIONS]
 
 Options:
   --update  Update plum
+  --update-rules Update rules
+  --ignore-gitignore  Enable the check of ignored files
 ```
 
+## What makes Plum faster than the dockerised version ?
+Plum is faster for several reasons:
+ - It doesn't pull the docker image every time you run it
+ - It doesn't have to start and remove the docker container
+ - The C coding style checker is compiled with optimization flags
+ - The C coding style checks are ran in parallel
