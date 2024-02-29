@@ -4,9 +4,9 @@ git clone https://github.com/LouisDupraz/Plum.git /tmp/Plum
 
 function install_deps() {
 if [ -x "$(command -v dnf)" ]; then
-    sudo dnf install -y tcl-devel boost-devel git cmake make gcc-c++ python3-devel which pip python3-pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
+    sudo dnf install -y tcl-devel boost-devel git cmake make gcc-c++ python3-devel which python3-pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
 elif [ -x "$(command -v apt-get)" ]; then
-    sudo apt-get -y install tcl-dev libboost-all-dev git cmake make build-essential python3-dev libpython3-dev which pip pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
+    sudo apt-get -y install tcl-dev libboost-all-dev git cmake make build-essential python3-dev libpython3-dev which pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
 elif [ -x "$(command -v pacman)" ]; then
     sudo pacman -S tcl boost boost-libs git cmake make gcc gcc-libs python which python-pip python-pylint || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
     echo -e "libclang==16.0.6" > requirements.txt
