@@ -6,9 +6,11 @@ function install_deps() {
 if [ -x "$(command -v dnf)" ]; then
     sudo dnf install -y tcl-devel boost-devel git cmake make gcc-c++ python3-devel which pip python3-pylint || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
 elif [ -x "$(command -v apt-get)" ]; then
-    sudo apt-get install tcl-dev libboost-dev git cmake make build-essential python3-dev libpython3-dev which pip pylint || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
+    sudo apt-get -y install tcl-dev libboost-all-dev git cmake make build-essential python3-dev libpython3-dev which pip pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
 elif [ -x "$(command -v pacman)" ]; then
     sudo pacman -S tcl boost boost-libs git cmake make gcc gcc-libs python which python-pip python-pylint || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
+    echo -e "libclang==16.0.6" > requirements.txt
+    sudo pip install -r requirements.txt
 else
     tput setaf 1
     echo "=> Error: Your distribution is not supported, please install the following packages manually:"
@@ -20,14 +22,12 @@ else
     echo "   - gcc / g++"
     echo "   - python3 / python3-dev"
     echo "   - pylint"
+    echo "   - python3-clang"
     echo "   - which"
     echo "   - pip"
     tput sgr0
     echo "   and then run this script again. The install will now proceed, but may fail."
 fi
-
-echo -e "libclang==16.0.6" > requirements.txt
-sudo pip install -r requirements.txt
 }
 
 
