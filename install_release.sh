@@ -5,7 +5,7 @@ if [ -x "$(command -v dnf)" ]; then
     sudo dnf install --refresh -y tcl-devel python3-devel python3-pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
 elif [ -x "$(command -v apt-get)" ]; then
     sudo apt-get update
-    sudo apt-get -y install tcl-dev python3-dev libpython3-dev pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
+    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC sudo apt-get -y install tcl-dev python3-dev libpython3-dev pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
 else
     tput setaf 1
     echo "=> Error: Your distribution is not supported, please install the following packages manually:"
