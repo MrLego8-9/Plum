@@ -12,5 +12,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: plum
+        name: plum.tar.gz
         path: plum.tar.gz
