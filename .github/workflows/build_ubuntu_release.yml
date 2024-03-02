@@ -11,7 +11,7 @@ jobs:
       run: ./setup_release.sh
     - name: Get Version
       id: get_version
-      run: echo ::set-output name=version::$(cat VERSION)
+      run: echo version=$(cat VERSION) >> $GITHUB_OUTPUT
     # Step to create a release
     - name: Create Release
       id: create_release
