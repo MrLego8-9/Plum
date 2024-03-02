@@ -32,3 +32,19 @@ jobs:
         asset_path: ./plum.tar.gz
         asset_name: plum.tar.gz
         asset_content_type: application/gzip
+
+    # Build Docker Image
+    - name: Build Docker image
+      run: docker build -t citro102/plum:latest .
+
+    # Log in to DockerHub
+    - name: Log in to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    # Push Docker Image to DockerHub
+    - name: Push Docker image to DockerHub
+      run: docker push citro102/plum:latest
+
