@@ -5,6 +5,9 @@ on: [push, delete, pull_request]
 jobs:
   build_release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     steps:
     - uses: actions/checkout@v4
     - name: Setup Release
