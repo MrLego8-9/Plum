@@ -15,6 +15,8 @@ jobs:
     - name: Get Version
       id: get_version
       run: echo version=$(cat VERSION) >> $GITHUB_OUTPUT
+    - name: Extract branch name
+      run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
     # Step to create a release
     - name: Create Release
       id: create_release
@@ -22,8 +24,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ env.BRANCH_NAME }}-${{ github.run_number }}-${{ github.sha }}
+        release_name: Release ${{ env.BRANCH_NAME }}-${{ github.run_number }}-${{ github.sha }}
         draft: false
         prerelease: false
 
