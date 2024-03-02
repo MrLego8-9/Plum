@@ -4,15 +4,14 @@ git clone https://github.com/LouisDupraz/Plum.git /tmp/Plum
 
 function install_deps() {
 if [ -x "$(command -v dnf)" ]; then
-    sudo dnf install -y tcl-devel boost-devel git cmake make gcc-c++ python3-devel which python3-pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
+    sudo dnf install -y tcl-devel boost-devel git cmake make gcc-c++ python3-devel which python3-pylint python3-clang || (echo "=> Error: dependency install went wrong"; exit 1)
 elif [ -x "$(command -v apt-get)" ]; then
-    sudo apt-get -y install tcl-dev libboost-all-dev git cmake make build-essential python3-dev libpython3-dev pylint python3-clang || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
+    sudo apt-get -y install tcl-dev libboost-all-dev git cmake make build-essential python3-dev libpython3-dev pylint python3-clang || (echo "=> Error: dependency install went wrong"; exit 1)
 elif [ -x "$(command -v pacman)" ]; then
-    sudo pacman -S tcl boost boost-libs git cmake make gcc gcc-libs python which python-pip python-pylint || (tput setaf 1; echo "=> Error: dependency install went wrong"; tput sgr0; exit 1)
+    sudo pacman -S tcl boost boost-libs git cmake make gcc gcc-libs python which python-pip python-pylint || (echo "=> Error: dependency install went wrong"; exit 1)
     echo -e "libclang==16.0.6" > requirements.txt
     sudo pip install -r requirements.txt
 else
-    tput setaf 1
     echo "=> Error: Your distribution is not supported, please install the following packages manually:"
     echo "   - tcl / tcl-dev"
     echo "   - boost / boost-libs"
@@ -25,7 +24,6 @@ else
     echo "   - python3-clang"
     echo "   - which"
     echo "   - pip"
-    tput sgr0
     echo "   and then run this script again. The install will now proceed, but may fail."
 fi
 }
