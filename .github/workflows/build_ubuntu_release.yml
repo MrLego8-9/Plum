@@ -1,6 +1,15 @@
 name: Build Ubuntu Release
 
-on: [push, delete, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  delete:
+    branches:
+      - main
 
 jobs:
   build_release:

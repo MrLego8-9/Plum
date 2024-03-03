@@ -25,6 +25,15 @@ The current installer script will install the required dependencies for the foll
 - Fedora
 - Arch
 
+### Docker
+Plum is also available as a docker image for CI/CD purposes.
+```shell
+docker pull citro102/plum:latest
+```
+
+Using it for regular development is not recommended as it is slower than the de-dockerized version.
+The image is updated every time a commit is added to the main branch. (Or when the coding style rules are updated)
+
 ## Usage
 
 ```sh
