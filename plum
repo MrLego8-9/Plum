@@ -3,19 +3,20 @@
 csc=""
 csh=""
 
-
-if [ "$#" == "1" ]; then
-  if [ "$1" == "--update" ]; then
+for arg in "$@"; do
+  if [ "$arg" == "--update" ]; then
     /opt/plum-coding-style/plum_update.sh
     exit 0
-  elif [ "$1" == "--update-rules" ]; then
+  elif [ "$arg" == "--update-rules" ]; then
     /opt/plum-coding-style/plum_update.sh --update-rules
     exit 0
-  elif [ "$1" == "--ignore-gitignore" ]; then
+  elif [ "$arg" == "--ignore-gitignore" ]; then
     csc+=" --ignore-gitignore"
+  elif [ "$arg" == "--no-status" ]; then
+    csh+=" --no-status"
   else
-    echo -e "Usage: plum [OPTION]\n\nOptions:\n  --update\tUpdate Plum\n  --update-rules\tUpdate Coding Style Rules\n  --ignore-gitignore\tIgnore files in .gitignore\n"
+    echo -e "Usage: plum [OPTION]\n\nOptions:\n  --update\tUpdate Plum\n  --update-rules\tUpdate Coding Style Rules\n  --ignore-gitignore\tIgnore files in .gitignore\n  --no-status\tAlways exit with status 0\n"
     exit 1
   fi
-fi
+done
 /opt/plum-coding-style/code-style-checker $csc

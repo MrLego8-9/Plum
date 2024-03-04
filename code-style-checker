@@ -25,5 +25,5 @@ if errors_sum == 0:
 
 err = "errors" if errors_sum > 1 else "error"
 print(f"Found {errors_sum} {err}")
-exit(1)
+exit(0 if "--no-status" in args else 1)
 
