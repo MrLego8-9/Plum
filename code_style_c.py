@@ -75,7 +75,7 @@ def checkCCodingStyle(args):
             if rule.split(":")[0] == split_line[-1]:
                 split_line[-1] = ": ".join(rule.split(":"))
                 break
-        vera_result[i] = ": ".join(split_line)
+        vera_result[i] = ":".join(split_line)
         if special_msg:
             vera_result[i] += "\033[0m\n"
             nb_true_errors -= 1
