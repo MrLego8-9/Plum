@@ -9,10 +9,12 @@ from multiprocessing import Pool, cpu_count
 
 def getIgnoredFiles():
     os.system("git check-ignore $(find . -type f -print) > .plumignore 2> /dev/null")
+    with open(".plumgitignore", "r") as f:
+        ignored_git_files = f.readlines()
+    os.system("rm -f .plumgitignore")
     with open(".plumignore", "r") as f:
-        ignored_files = f.readlines()
-    os.system("rm -f .plumignore")
-    return [line.strip() for line in ignored_files]
+        ignored_plum_files = f.readlines()
+    return [line.strip() for line in (ignored_git_files + ignored_plum_files)]
 
 
 def process_files_chunk(files_chunk):

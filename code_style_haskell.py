@@ -5,11 +5,13 @@ import sys
 import subprocess
 
 def getIgnoredFiles():
-    os.system("git check-ignore $(find . -type f -print) > .plumignore 2> /dev/null")
+    os.system("git check-ignore $(find . -type f -print) > .plumgitignore 2> /dev/null")
+    with open(".plumgitignore", "r") as f:
+        ignored_git_files = f.readlines()
+    os.system("rm -f .plumgitignore")
     with open(".plumignore", "r") as f:
-        ignored_files = f.readlines()
-    os.system("rm -f .plumignore")
-    return ":".join(line.rstrip("\n").lstrip("./") for line in ignored_files)
+        ignored_plum_files = f.readlines()
+    return ":".join(line.rstrip("\n").lstrip("./") for line in (ignored_plum_files + ignored_git_files))
 
 
 def checkHaskellCodingStyle(args):
