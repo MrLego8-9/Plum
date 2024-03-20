@@ -8,7 +8,7 @@ from multiprocessing import Pool, cpu_count
 
 
 def getIgnoredFiles():
-    os.system("git check-ignore $(find . -type f -print) > .plumignore 2> /dev/null")
+    os.system("git check-ignore $(find . -type f -print) > .plumgitignore 2> /dev/null")
     with open(".plumgitignore", "r") as f:
         ignored_git_files = f.readlines()
     os.system("rm -f .plumgitignore")
