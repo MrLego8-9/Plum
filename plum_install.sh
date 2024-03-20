@@ -42,7 +42,7 @@ sudo rm -rf banana-vera/
 git clone https://github.com/Epitech/banana-vera.git
 cd banana-vera
 
-sed -i 's|add_executable(vera ${srcs})|add_executable(vera ${srcs})\ntarget_compile_options(vera PRIVATE\n  -Ofast\n  -march=native\n)|g' src/CMakeLists.txt
+sed -i 's|add_executable(vera ${srcs})|add_executable(vera ${srcs})\ntarget_compile_options(vera PRIVATE\n  -Ofast\n  -march=native\n)\ntarget_link_options(vera PRIVATE\n  -flto=auto\n)|g' src/CMakeLists.txt
 
 cmake -B build . -DVERA_LUA=OFF -DPANDOC=OFF -DVERA_USE_SYSTEM_BOOST=ON > /dev/null
 cmake --build build -j12 > /dev/null
