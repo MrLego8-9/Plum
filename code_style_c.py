@@ -12,8 +12,11 @@ def getIgnoredFiles():
     with open(".plumgitignore", "r") as f:
         ignored_git_files = f.readlines()
     os.system("rm -f .plumgitignore")
-    with open(".plumignore", "r") as f:
-        ignored_plum_files = f.readlines()
+    try:
+        with open(".plumignore", "r") as f:
+            ignored_plum_files = f.readlines()
+    except FileNotFoundError:
+        ignored_plum_files = []
     return [line.strip() for line in (ignored_git_files + ignored_plum_files)]
 
 
