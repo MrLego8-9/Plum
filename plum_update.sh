@@ -21,7 +21,7 @@ if [ "$#" == "1" ]; then
     sudo cp plum /bin
 
     sudo mkdir -p /opt/plum-coding-style
-    sudo cp code-style* /opt/plum-coding-style/
+    sudo cp code_style* /opt/plum-coding-style/
     sudo cp VERSION /opt/plum-coding-style/
     sudo cp plum_update.sh /opt/plum-coding-style/
 

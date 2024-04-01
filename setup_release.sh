@@ -20,7 +20,7 @@ cd release
 cp /tmp/Plum/__main__.py .
 cp /tmp/Plum/plum_update.sh .
 cp /tmp/Plum/VERSION .
-cp /tmp/Plum/code-style-checker .
+cp /tmp/Plum/code_style_checker.py .
 cp /tmp/Plum/code_style_c.py .
 cp /tmp/Plum/code_style_haskell.py .
 cp /tmp/Plum/install_release.sh .
