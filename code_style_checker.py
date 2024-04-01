@@ -57,8 +57,11 @@ def printReport(report: dict):
 
 
 def runChecks(args):
-    c_results = checkCCodingStyle(args)
-    haskell_results = checkHaskellCodingStyle(args)
+    ignored_files = []
+    if not args.ignoregitignore:
+        ignored_files = getIgnoredFiles()
+    c_results = checkCCodingStyle(ignored_files)
+    haskell_results = checkHaskellCodingStyle(ignored_files)
 
     c_error_sum = sum(c_results[0].values())
     haskell_error_sum = sum(haskell_results[0].values())
