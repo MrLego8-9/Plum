@@ -17,7 +17,7 @@ git clone https://github.com/LouisDupraz/Plum.git /tmp/Plum
 mkdir -p release
 cd release
 
-cp /tmp/Plum/plum .
+cp /tmp/Plum/__main__.py .
 cp /tmp/Plum/plum_update.sh .
 cp /tmp/Plum/VERSION .
 cp /tmp/Plum/code-style-checker .

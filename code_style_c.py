@@ -1,23 +1,9 @@
 #!/usr/bin/python3
 
 import os
-import sys
 import subprocess
 import fnmatch
 from multiprocessing import Pool, cpu_count
-
-
-def getIgnoredFiles():
-    os.system("git check-ignore $(find . -type f -print) > .plumgitignore 2> /dev/null")
-    with open(".plumgitignore", "r") as f:
-        ignored_git_files = f.readlines()
-    os.system("rm -f .plumgitignore")
-    try:
-        with open(".plumignore", "r") as f:
-            ignored_plum_files = f.readlines()
-    except FileNotFoundError:
-        ignored_plum_files = []
-    return [line.strip() for line in (ignored_git_files + ignored_plum_files)]
 
 
 def process_files_chunk(files_chunk):
@@ -29,11 +15,9 @@ def process_files_chunk(files_chunk):
     return vera_results
 
 
-def checkCCodingStyle(args):
-    ignore_gitignore = "--ignore-gitignore" in args
-
+def checkCCodingStyle(ignored_files):
     excluded_dirs = ["./tests", "./bonus", "./.git"]
-    excluded_files = [] if ignore_gitignore else getIgnoredFiles()
+    excluded_files = [line.strip() for line in ignored_files]
 
     included_files = []
 
@@ -63,32 +47,19 @@ def checkCCodingStyle(args):
         c2c = c2c_file.readlines()
 
     nb_true_errors = nb_errors
+    error_count = {"INFO": 0, "MINOR": 0, "MAJOR": 0, "FATAL": 0}
+    errors = []
     for i in range(nb_errors):
         special_msg = False
         split_line = vera_result[i].split(":")
-        if split_line[-2] == " MAJOR":
-            split_line[-2] = "\033[91;1m MAJOR\033[0m"
-        elif split_line[-2] == " MINOR":
-            split_line[-2] = "\033[93;1m MINOR\033[0m"
-        elif split_line[-2] == " INFO":
-            split_line[-2] = "\033[96;1m INFO\033[0m"
-        else:
-            special_msg = True
-            split_line[-2] = "\033[90;1m" + split_line[-2]
+        level = split_line[-2].strip(" ")
+        if level in ("FATAL", "MAJOR", "MINOR", "INFO"):
+            error_count[level] += 1
+        split_line[-2] = level
 
         for rule in c2c:
             if rule.split(":")[0] == split_line[-1]:
-                split_line[-1] = ": ".join(rule.split(":"))
+                split_line = split_line[:-1] + rule.split(":")
                 break
-        vera_result[i] = ":".join(split_line)
-        if special_msg:
-            vera_result[i] += "\033[0m\n"
-            nb_true_errors -= 1
 
-    return nb_true_errors, "".join(vera_result), nb_errors != 0
-    #if nb_errors == 0:
-    #    print("No errors found")
-    #elif nb_errors == 1:
-    #    print("\nFound 1 error")
-    #else:
-    #    print(f"\nFound {nb_errors} errors")
+    return error_count, errors
