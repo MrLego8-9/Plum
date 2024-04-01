@@ -8,8 +8,9 @@ FATAL_COLOR = "\033[91;1;4m"
 MAJOR_COLOR = "\033[91;1m"
 MINOR_COLOR = "\033[93;1m"
 INFO_COLOR = "\033[96;1m"
-SPECIAL_COLOR = "\033[90;1m"
-FILE_COLOR = "\033[98;1m"
+TITLE_COLOR = "\033[1m"
+SPECIAL_COLOR = "\033[98;1m"
+FILE_COLOR = "\033[90m"
 OK_COLOR = "\033[92m"
 NO_COLOR = "\033[0m"
 
@@ -35,14 +36,16 @@ def getIgnoredFiles() -> list[str]:
 def getErrorsDict(errors: list) -> dict:
     errors_dict = {}
     for error in errors:
-        if errors_dict[error[0]] is None:
+        if errors_dict.get(error[0]) is None:
             errors_dict[error[0]] = [error[1:]]
         else:
-            errors_dict[error[0]] = errors_dict[error[0]].append(error[1:])
+            errors_dict[error[0]] += [error[1:]]
+    return errors_dict
 
 
-def printError(file: str, tokens: tuple):
+def printError(file: str, tokens: list):
     print("   ", end='')
+    tokens[3] = tokens[3].strip("\n")
     if tokens[1] in ("FATAL", "MAJOR", "MINOR", "INFO"):
         print(f"{colors_dict[tokens[1]]}[{tokens[1]}] ({tokens[2]}){NO_COLOR} - {tokens[3]} {FILE_COLOR}({file}:{tokens[0]}){NO_COLOR}")
     else:
@@ -67,23 +70,21 @@ def runChecks(args):
     haskell_error_sum = sum(haskell_results[0].values())
 
     global_error_sum = c_error_sum + haskell_error_sum
-
     c_errors = getErrorsDict(c_results[1])
     haskell_errors = getErrorsDict(haskell_results[1])
-
     if c_error_sum > 0:
         print("\n\033[96;1mC Style results\033[0m\n")
-        for file, errors in c_errors.values():
+        for file, errors in c_errors.items():
             sorted_errors = sorted(errors, key=(lambda x: x[0]))
-            print(f"\033[90m‣ In File {file}")
+            print(f"\n{TITLE_COLOR}‣ In File {file}{NO_COLOR}")
             for error in sorted_errors:
                 printError(file, error)
 
     if haskell_error_sum > 0:
         print("\n\033[96;1mHaskell Style results\033[0m\n")
-        for file, errors in haskell_errors.values():
+        for file, errors in haskell_errors.items():
             sorted_errors = sorted(errors, key=(lambda x: x[0]))
-            print(f"\033[90m‣ In File {file}")
+            print(f"\n{TITLE_COLOR}‣ In File {file}{NO_COLOR}")
             for error in sorted_errors:
                 printError(file, error)
 
@@ -92,12 +93,15 @@ def runChecks(args):
         exit(0)
 
     if c_error_sum > 0:
-        printReport(c_errors)
+        print(f"\n{TITLE_COLOR}C report:{NO_COLOR}")
+        printReport(c_results[0])
     if haskell_error_sum > 0:
-        printReport(haskell_errors)
+        print(f"\n{TITLE_COLOR}Haskell report:{NO_COLOR}")
+        printReport(haskell_results[0])
     global_errors = {}
-    for key in c_errors.keys():
-        global_errors[key] = c_errors[key] + haskell_errors[key]
+    for key in c_results[0].keys():
+        global_errors[key] = c_results[0][key] + haskell_results[0][key]
+    print(f"\n{TITLE_COLOR}Global report:{NO_COLOR}")
     printReport(global_errors)
     exit(0 if args.nostatus else 1)
 

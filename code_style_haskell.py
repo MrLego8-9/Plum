@@ -11,7 +11,6 @@ def checkHaskellCodingStyle(ignored_files):
 
     nb_errors = len(vera_result)
     error_count = {"INFO": 0, "MINOR": 0, "MAJOR": 0, "FATAL": 0}
-    error_objects = []
     errors = []
 
     for i in range(nb_errors):
@@ -21,7 +20,5 @@ def checkHaskellCodingStyle(ignored_files):
             error_count[level] += 1
         split_line[-2] = level
         split_line = split_line[:-1] + [part.strip(" ") for part in split_line[-1].split("#")]
-        errors = split_line
-        # vera_result[i] = ": ".join(split_line) + "\n"
-
+        errors = errors.append(split_line)
     return error_count, errors

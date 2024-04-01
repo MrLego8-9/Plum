@@ -46,11 +46,9 @@ def checkCCodingStyle(ignored_files):
     with open("/usr/local/lib/vera++/code_to_comment", "r") as c2c_file:
         c2c = c2c_file.readlines()
 
-    nb_true_errors = nb_errors
     error_count = {"INFO": 0, "MINOR": 0, "MAJOR": 0, "FATAL": 0}
     errors = []
     for i in range(nb_errors):
-        special_msg = False
         split_line = vera_result[i].split(":")
         level = split_line[-2].strip(" ")
         if level in ("FATAL", "MAJOR", "MINOR", "INFO"):
@@ -61,5 +59,5 @@ def checkCCodingStyle(ignored_files):
             if rule.split(":")[0] == split_line[-1]:
                 split_line = split_line[:-1] + rule.split(":")
                 break
-
+        errors.append(split_line)
     return error_count, errors
