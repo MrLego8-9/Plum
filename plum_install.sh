@@ -65,7 +65,7 @@ sudo docker run --name code-style-tmp -v /tmp/docker-volume:/mounted-dir --entry
 sudo docker rm code-style-tmp > /dev/null
 
 sudo mkdir -p /opt/plum-coding-style
-sudo cp __main__.py /opt/plum-coding-style/plum
+sudo cp __main__.py /opt/plum-coding-style/
 sudo cp code_style* /opt/plum-coding-style/
 sudo cp VERSION /opt/plum-coding-style/
 sudo cp plum_update.sh /opt/plum-coding-style/

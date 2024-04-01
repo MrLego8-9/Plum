@@ -18,7 +18,7 @@ fi
 echo "Installing Plum release..."
 
 sudo mkdir -p /opt/plum-coding-style
-sudo cp __main__.py /opt/plum-coding-style/plum
+sudo cp __main__.py /opt/plum-coding-style/
 sudo cp code_style* /opt/plum-coding-style/
 sudo cp VERSION /opt/plum-coding-style/
 sudo cp plum_update.sh /opt/plum-coding-style/
