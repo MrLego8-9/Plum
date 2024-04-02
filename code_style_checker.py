@@ -9,7 +9,7 @@ MAJOR_COLOR = "\033[91;1m"
 MINOR_COLOR = "\033[93;1m"
 INFO_COLOR = "\033[96;1m"
 TITLE_COLOR = "\033[1m"
-SPECIAL_COLOR = "\033[98;1m"
+SPECIAL_COLOR = "\033[94;1m"
 FILE_COLOR = "\033[90m"
 OK_COLOR = "\033[92m"
 NO_COLOR = "\033[0m"
@@ -45,11 +45,13 @@ def getErrorsDict(errors: list) -> dict:
 
 def printError(file: str, tokens: list):
     print("   ", end='')
-    tokens[3] = tokens[3].strip("\n")
+    tokens[-1] = tokens[-1].strip("\n")
     if tokens[1] in ("FATAL", "MAJOR", "MINOR", "INFO"):
         print(f"{colors_dict[tokens[1]]}[{tokens[1]}] ({tokens[2]}){NO_COLOR} - {tokens[3]} {FILE_COLOR}({file}:{tokens[0]}){NO_COLOR}")
     else:
-        print(f"{SPECIAL_COLOR}[SPECIAL]{NO_COLOR} - {tokens[3]} {FILE_COLOR}({file}:{tokens[0]}){NO_COLOR}")
+        line = tokens[0]
+        text = ''.join(tokens[1:])
+        print(f"{SPECIAL_COLOR}[SPECIAL]{NO_COLOR} - {text} {FILE_COLOR}({file}:{line}){NO_COLOR}")
 
 
 def printReport(report: dict):
