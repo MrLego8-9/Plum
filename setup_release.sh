@@ -55,7 +55,7 @@ build_vera
 cd "$curr_dir"
 
 cp /tmp/banana-vera/vera++ .
-tar -czvf "plum.tar.gz" plum plum_update.sh VERSION code-style-checker code_style_c.py code_style_haskell.py vera++ lambdananas vera++-lib install_release.sh
+tar -czvf "plum.tar.gz" __main__.py plum_update.sh VERSION code_style_checker.py code_style_c.py code_style_haskell.py vera++ lambdananas vera++-lib install_release.sh
 
 cp "plum.tar.gz" ..
 cd ..
