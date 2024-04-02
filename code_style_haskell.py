@@ -20,5 +20,5 @@ def checkHaskellCodingStyle(ignored_files):
             error_count[level] += 1
         split_line[-2] = level
         split_line = split_line[:-1] + [part.strip(" ") for part in split_line[-1].split("#")]
-        errors = errors.append(split_line)
+        errors.append(split_line)
     return error_count, errors
