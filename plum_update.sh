@@ -15,6 +15,7 @@ if [ "$#" == "1" ]; then
 
     echo -e "#!/bin/bash\ncp /usr/local/bin/lambdananas /mounted-dir\ncp -r /usr/local/lib/vera++ /mounted-dir" > /tmp/docker-volume/copy.sh
     chmod +x /tmp/docker-volume/copy.sh
+    docker pull ghcr.io/epitech/coding-style-checker:latest
     docker run --name code-style-tmp -v /tmp/docker-volume:/mounted-dir --entrypoint='/mounted-dir/copy.sh' ghcr.io/epitech/coding-style-checker:latest
     docker rm code-style-tmp > /dev/null
 

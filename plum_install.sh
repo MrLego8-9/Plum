@@ -61,6 +61,7 @@ mkdir -p /tmp/docker-volume/
 
 echo -e "#!/bin/bash\ncp /usr/local/bin/lambdananas /mounted-dir\ncp -r /usr/local/lib/vera++ /mounted-dir" > /tmp/docker-volume/copy.sh
 chmod +x /tmp/docker-volume/copy.sh
+sudo docker pull ghcr.io/epitech/coding-style-checker:latest
 sudo docker run --name code-style-tmp -v /tmp/docker-volume:/mounted-dir --entrypoint='/mounted-dir/copy.sh' ghcr.io/epitech/coding-style-checker:latest
 sudo docker rm code-style-tmp > /dev/null
 
