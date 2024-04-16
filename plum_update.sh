@@ -18,15 +18,16 @@ if [ "$#" == "1" ]; then
     docker run --name code-style-tmp -v /tmp/docker-volume:/mounted-dir --entrypoint='/mounted-dir/copy.sh' ghcr.io/epitech/coding-style-checker:latest
     docker rm code-style-tmp > /dev/null
 
-    sudo cp plum /bin
-
     sudo mkdir -p /opt/plum-coding-style
+    sudo cp __main__.py /opt/plum-coding-style/
     sudo cp code_style* /opt/plum-coding-style/
     sudo cp VERSION /opt/plum-coding-style/
     sudo cp plum_update.sh /opt/plum-coding-style/
 
     sudo cp -r /tmp/docker-volume/vera++ /usr/local/lib
     sudo cp /tmp/docker-volume/lambdananas /bin
+    sudo rm -f /bin/plum
+    sudo ln -s /opt/plum-coding-style/__main__.py /bin/plum
 
     sudo rm -rf /tmp/docker-volume/
     exit 0
