@@ -4,7 +4,7 @@ if [ -x "$(command -v plum)" ]; then
     echo "Generating portable Plum release..."
 else
     echo "Plum is not installed, attempting to install it first..."
-    curl https://raw.githubusercontent.com/LouisDupraz/Plum/main/plum_install.sh | bash
+    curl https://raw.githubusercontent.com/MrLego8-9/Plum/main/plum_install.sh | bash
     if [ "$?" != "0" ]; then
         echo "Plum installation failed, exiting..."
         exit 1
@@ -12,7 +12,7 @@ else
 fi
 
 sudo rm -rf /tmp/Plum
-git clone https://github.com/LouisDupraz/Plum.git /tmp/Plum
+git clone https://github.com/MrLego8-9/Plum.git /tmp/Plum
 
 mkdir -p release
 cd release

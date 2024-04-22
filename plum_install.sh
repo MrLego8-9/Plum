@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo rm -rf /tmp/Plum
-git clone https://github.com/LouisDupraz/Plum.git /tmp/Plum
+git clone https://github.com/MrLego8-9/Plum.git /tmp/Plum
 
 function install_deps() {
 if [ -x "$(command -v dnf)" ]; then

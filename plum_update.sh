@@ -4,7 +4,7 @@
 if [ "$#" == "1" ]; then
   if [ "$1" == "--update-rules" ]; then
     sudo rm -rf /tmp/Plum
-    git clone https://github.com/LouisDupraz/Plum.git /tmp/Plum
+    git clone https://github.com/MrLego8-9/Plum.git /tmp/Plum
 
     echo -e "\nUpdating Rules"
 
@@ -36,11 +36,11 @@ if [ "$#" == "1" ]; then
 fi
 
 curr_version="$(cat /opt/plum-coding-style/VERSION)"
-upstream_version="$(curl -s https://raw.githubusercontent.com/LouisDupraz/Plum/main/VERSION)"
+upstream_version="$(curl -s https://raw.githubusercontent.com/MrLego8-9/Plum/main/VERSION)"
 
 if [ "$curr_version" != "$upstream_version" ]; then
   printf "Updating Plum\n\n"
-  curl https://raw.githubusercontent.com/LouisDupraz/Plum/main/plum_install.sh | bash
+  curl https://raw.githubusercontent.com/MrLego8-9/Plum/main/plum_install.sh | bash
   exit 0
 else
   printf "Plum is up to date\n"
