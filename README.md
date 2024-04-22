@@ -5,7 +5,7 @@ De-Dockerized coding style checker for Epitech projects
 ## Install
 
 ```sh
-curl https://raw.githubusercontent.com/LouisDupraz/Plum/main/plum_install.sh | bash
+curl https://raw.githubusercontent.com/MrLego8-9/Plum/main/plum_install.sh | bash
 ```
 ### Requires
 - Git
