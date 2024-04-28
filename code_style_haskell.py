@@ -16,7 +16,8 @@ def checkHaskellCodingStyle(ignored_files):
     for i in range(nb_errors):
         split_line = vera_result[i].split(":")
         if len(split_line) != 4:
-            errors.append(vera_result[i])
+            sl = vera_result[i].split(" ")
+            errors.append([sl[0], vera_result[i]])
             continue
         level = split_line[-2].strip(" ")
         if level in ("FATAL", "MAJOR", "MINOR", "INFO"):
