@@ -45,8 +45,11 @@ def getErrorsDict(errors: list) -> dict:
 
 def printError(file: str, tokens: list):
     print("   ", end='')
+    if len(tokens) == 1:
+        print(f"{SPECIAL_COLOR}[SPECIAL]{NO_COLOR} - {tokens[0]} {FILE_COLOR}({file}){NO_COLOR}")
+        return
     tokens[-1] = tokens[-1].strip("\n")
-    if tokens[1] in ("FATAL", "MAJOR", "MINOR", "INFO") and len(tokens) > 1:
+    if tokens[1] in ("FATAL", "MAJOR", "MINOR", "INFO"):
         print(f"{colors_dict[tokens[1]]}[{tokens[1]}] ({tokens[2]}){NO_COLOR} - {tokens[3]} {FILE_COLOR}({file}:{tokens[0]}){NO_COLOR}")
     else:
         line = tokens[0]
