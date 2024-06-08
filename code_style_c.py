@@ -15,23 +15,15 @@ def process_files_chunk(files_chunk):
     return vera_results
 
 
-def checkCCodingStyle(ignored_files):
-    excluded_dirs = ["./tests", "./bonus", "./.git"]
-    excluded_files = [line.strip() for line in ignored_files]
-    findex = 0
-    while findex < len(excluded_files):
-        if excluded_files[findex][-1] == '/':
-            excluded_dirs.append(excluded_files[findex][:-1])
-            excluded_files.pop(findex)
-        else:
-            findex += 1
+def checkCCodingStyle(ignored_files: list[str], ignored_dirs: list[str]):
+    excluded_dirs = ["./tests", "./bonus", "./.git"] + ignored_dirs
     included_files = []
 
     for root, dirs, files in os.walk(".", followlinks=True):
         dirs[:] = [d for d in dirs if os.path.join(root, d) not in excluded_dirs]
         for file in files:
             filepath = os.path.join(root, file)
-            if not any(fnmatch.fnmatch(filepath, pattern) for pattern in excluded_dirs) and filepath not in excluded_files:
+            if not any(fnmatch.fnmatch(filepath, pattern) for pattern in excluded_dirs) and filepath not in ignored_files:
                 included_files.append(filepath)
 
     nb_files = len(included_files)

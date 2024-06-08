@@ -2,9 +2,9 @@
 import subprocess
 
 
-def checkHaskellCodingStyle(ignored_files):
-    gitignore_content = ":".join(line.rstrip("\n").lstrip("./") for line in ignored_files)
-    excluded_files = ("Setup.hs:setup.hs:.git:.stack-work:test:tests:bonus" + gitignore_content).strip(':')
+def checkHaskellCodingStyle(ignored_files: list[str], ignored_dirs: list[str]):
+    ignored_content = ":".join(line.removeprefix("./") for line in ignored_dirs + ignored_files)
+    excluded_files = ("Setup.hs:setup.hs:.git:.stack-work:test:tests:bonus" + ignored_content).strip(':')
 
     vera_result = subprocess.run(['lambdananas', '-o', 'vera', '--exclude', excluded_files, '.'],
                                  stdout=subprocess.PIPE).stdout.decode('utf-8').split("\n")[:-1]

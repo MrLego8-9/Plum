@@ -17,20 +17,56 @@ NO_COLOR = "\033[0m"
 colors_dict = {"FATAL": FATAL_COLOR, "MAJOR": MAJOR_COLOR, "MINOR": MINOR_COLOR, "INFO": INFO_COLOR}
 
 
-def getIgnoredFiles() -> list[str]:
+def getIgnoredFiles() -> (list[str], list[str]):
     try:
+        os.system("git check-ignore $(find . -type d -print) > .plumgitignoredir 2> /dev/null")
         os.system("git check-ignore $(find . -type f -print) > .plumgitignore 2> /dev/null")
+        with open(".plumgitignoredir", "r") as f:
+            ignored_git_dirs = f.readlines()
         with open(".plumgitignore", "r") as f:
             ignored_git_files = f.readlines()
-        os.system("rm -f .plumgitignore")
+        unique_dirs = []
+        for directory in ignored_git_dirs:
+            directory = directory.rstrip("\n")
+            is_unique = True
+            for ud in unique_dirs:
+                if directory.startswith(ud):
+                    is_unique = False
+                    break
+            if is_unique:
+                unique_dirs.append(directory)
+        unique_files = []
+        for file in ignored_git_files:
+            file = file.rstrip("\n")
+            is_unique = True
+            for ud in unique_dirs:
+                if file.startswith(ud):
+                    is_unique = False
+                    break
+            if is_unique:
+                unique_files.append(file)
+        os.system("rm -f .plumgitignore .plumgitignoredir")
     except:
-        ignored_git_files = []
+        unique_files = []
+        unique_dirs = []
     try:
         with open(".plumignore", "r") as f:
             ignored_plum_files = f.readlines()
+        plum_files = []
+        plum_dirs = []
+        for i in range(len(ignored_plum_files)):
+            ignored_plum_files[i] = ignored_plum_files[i].rstrip("\n")
+            if not ignored_plum_files[i].startswith("./"):
+                ignored_plum_files[i] = "./" + ignored_plum_files[i]
+            if os.path.exists(ignored_plum_files[i]):
+                if os.path.isdir(ignored_plum_files[i]):
+                    plum_dirs.append(ignored_plum_files[i].rstrip("/"))
+                else:
+                    plum_files.append(ignored_plum_files[i])
     except FileNotFoundError:
-        ignored_plum_files = []
-    return ignored_git_files + ignored_plum_files
+        plum_files = []
+        plum_dirs = []
+    return unique_dirs + plum_dirs, unique_files + plum_files
 
 
 def getErrorsDict(errors: list) -> dict:
@@ -66,10 +102,11 @@ def printReport(report: dict):
 
 def runChecks(args):
     ignored_files = []
+    ignored_dirs = []
     if not args.ignoregitignore:
-        ignored_files = getIgnoredFiles()
-    c_results = checkCCodingStyle(ignored_files)
-    haskell_results = checkHaskellCodingStyle(ignored_files)
+        ignored_dirs, ignored_files = getIgnoredFiles()
+    c_results = checkCCodingStyle(ignored_files, ignored_dirs)
+    haskell_results = checkHaskellCodingStyle(ignored_files, ignored_dirs)
 
     c_error_sum = sum(c_results[0].values())
     haskell_error_sum = sum(haskell_results[0].values())
