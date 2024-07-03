@@ -22,6 +22,11 @@ func downloadPlumBinary(outputPath string) error {
 		_, _ = fmt.Fprintln(os.Stderr, string(wgetOutput))
 		return wgetErr
 	}
+	chmodErr := os.Chmod(outputPath, 0755)
+	if chmodErr != nil {
+		_, _ = fmt.Fprintln(os.Stderr, "chmod", chmodErr)
+		return chmodErr
+	}
 	return nil
 }
 
