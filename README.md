@@ -37,12 +37,15 @@ The image is updated every time a commit is added to the main branch. (Or when t
 ## Usage
 
 ```sh
-plum [OPTIONS]
-
-Options:
-  --update  Update plum
-  --update-rules Update rules
-  --ignore-gitignore  Enable the check of ignored files
+Usage of plum:
+  --no-ignore
+    Do not ignore files in .gitignore and .plumignore
+  --no-status
+    Always return with exit code 0
+  --update
+    Update Plum
+  --update-rules
+    Update the coding style rules
 ```
 
 ## What makes Plum faster than the dockerised version ?
