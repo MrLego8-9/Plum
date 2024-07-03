@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const PlumVersion = "2.2.1"
+const PlumVersion = "3.0.0"
 
 const remotePlumBinary = "/tmp/plum"
 
