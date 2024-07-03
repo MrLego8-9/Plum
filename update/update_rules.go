@@ -55,7 +55,7 @@ func moveDockerContents() {
 }
 
 func buildPlumBinary() {
-	buildPlum := exec.Command("go", "build")
+	buildPlum := exec.Command("go", "build", "-tags", "netgo")
 	buildPlum.Dir = updateDirectory
 	buildPlum.Stdout = os.Stdout
 	buildPlum.Stderr = os.Stderr

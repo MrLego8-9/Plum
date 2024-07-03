@@ -71,7 +71,7 @@ sudo rm -f /bin/plum
 
 if [ -x "$(command -v go)" ]; then
     echo -e "Go is installed, compiling plum"
-    go build
+    go build -tags netgo
 else
     echo -e "Go is not installed, downloading prebuilt release"
     wget -O "/tmp/Plum/plum" "https://github.com/MrLego8-9/Plum/releases/latest/download/plum"
