@@ -11,7 +11,7 @@ const plumBinaryPos = "/bin/plum"
 
 const dockerVolumeDirectory = "/tmp/docker-volume"
 const dockerScript = "#!/bin/bash\ncp /usr/local/bin/lambdananas /mounted-dir\ncp -r /usr/local/lib/vera++ /mounted-dir"
-const dockerEntrypoint = "--entrypoint='/mounted-dir/copy.sh'"
+const dockerEntrypoint = "--entrypoint=/mounted-dir/copy.sh"
 const dockerImage = "ghcr.io/epitech/coding-style-checker:latest"
 const dockerContainerName = "code-style-tmp"
 
@@ -20,11 +20,11 @@ func handleDockerInteraction() {
 	if removeDockerErr != nil {
 		log.Fatal("Remove temp docker volume", removeDockerErr)
 	}
-	mkDockerErr := os.MkdirAll(dockerVolumeDirectory, 0660)
+	mkDockerErr := os.MkdirAll(dockerVolumeDirectory, 0755)
 	if mkDockerErr != nil {
 		log.Fatal("Mkdir docker volume", mkDockerErr)
 	}
-	createDockerScriptErr := os.WriteFile("/tmp/docker-volume/copy.sh", []byte(dockerScript), 0777)
+	createDockerScriptErr := os.WriteFile("/tmp/docker-volume/copy.sh", []byte(dockerScript), 0755)
 	if createDockerScriptErr != nil {
 		log.Fatal("Create docker script", createDockerScriptErr)
 	}
@@ -32,7 +32,10 @@ func handleDockerInteraction() {
 	if pullDockerErr != nil {
 		log.Fatal("Pull docker image", pullDockerErr)
 	}
-	dockerRunErr := exec.Command("docker", "run", "--name", dockerContainerName, "-v", dockerVolumeDirectory+":/mounted-dir", dockerEntrypoint, dockerImage).Run()
+	dockerRunCmd := exec.Command("docker", "run", "--name", dockerContainerName, "-v", dockerVolumeDirectory+":/mounted-dir", dockerEntrypoint, dockerImage)
+	dockerRunCmd.Stderr = os.Stderr
+	dockerRunCmd.Stdout = os.Stdout
+	dockerRunErr := dockerRunCmd.Run()
 	if dockerRunErr != nil {
 		log.Fatal("Run docker container", dockerRunErr)
 	}
@@ -43,15 +46,14 @@ func handleDockerInteraction() {
 }
 
 func moveDockerContents() {
-	moveVeraDirErr := os.Rename(dockerVolumeDirectory+"/vera++", "/usr/local/lib/vera++")
+	moveVeraDirErr := exec.Command("cp", "-r", dockerVolumeDirectory+"/vera++", "/usr/local/lib/vera++").Run()
 	if moveVeraDirErr != nil {
 		log.Fatal("Move vera directory", moveVeraDirErr)
 	}
-	moveLambdananas := os.Rename(dockerVolumeDirectory+"/lambdananas", "/bin/lambdananas")
+	moveLambdananas := exec.Command("cp", dockerVolumeDirectory+"/lambdananas", "/bin/lambdananas").Run()
 	if moveLambdananas != nil {
 		log.Fatal("Move lambdananas", moveLambdananas)
 	}
-
 }
 
 func buildPlumBinary() {
@@ -64,7 +66,7 @@ func buildPlumBinary() {
 	if buildErr != nil {
 		log.Fatal("Build plum", buildErr)
 	}
-	movePlumErr := os.Rename(updateDirectory+"/plum", plumBinaryPos)
+	movePlumErr := exec.Command("cp", updateDirectory+"/plum", plumBinaryPos).Run()
 	if movePlumErr != nil {
 		log.Fatal("Move plum", movePlumErr)
 	}
