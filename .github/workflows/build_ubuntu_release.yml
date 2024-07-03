@@ -55,6 +55,16 @@ jobs:
         asset_name: plum.tar.gz
         asset_content_type: application/gzip
 
+    - name: Upload Release Binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./plum
+        asset_name: plum
+        asset_content_type: binary/octet-stream
+
     # Build Docker Image
     - name: Build Docker image
       run: docker build -t citro102/plum:latest .
