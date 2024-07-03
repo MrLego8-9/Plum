@@ -17,12 +17,7 @@ git clone https://github.com/MrLego8-9/Plum.git /tmp/Plum
 mkdir -p release
 cd release
 
-cp /tmp/Plum/__main__.py .
-cp /tmp/Plum/plum_update.sh .
-cp /tmp/Plum/VERSION .
-cp /tmp/Plum/code_style_checker.py .
-cp /tmp/Plum/code_style_c.py .
-cp /tmp/Plum/code_style_haskell.py .
+sudo cp /bin/plum .
 cp /tmp/Plum/install_release.sh .
 
 sudo cp /bin/lambdananas .
@@ -55,7 +50,7 @@ build_vera
 cd "$curr_dir"
 
 cp /tmp/banana-vera/vera++ .
-tar -czvf "plum.tar.gz" __main__.py plum_update.sh VERSION code_style_checker.py code_style_c.py code_style_haskell.py vera++ lambdananas vera++-lib install_release.sh
+tar -czvf "plum.tar.gz" plum vera++ lambdananas vera++-lib install_release.sh
 
 cp "plum.tar.gz" ..
 cd ..

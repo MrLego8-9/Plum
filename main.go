@@ -2,11 +2,15 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"plum/io"
 	"plum/style"
+	"plum/update"
+	"strconv"
+	"strings"
 	"sync"
 )
 
@@ -46,21 +50,47 @@ func main() {
 	updateRulesFlag := flag.Bool("update-rules", false, "Update the coding style rules")
 	ignoreProcessingFlag := flag.Bool("no-ignore", false, "Do not ignore files in .gitignore and .plumignore")
 	noStatusFlag := flag.Bool("no-status", false, "Always return with exit code 0")
+	versionFlag := flag.Bool("version", false, "Show version")
 	flag.Parse()
 
+	if *versionFlag {
+		fmt.Print(update.PlumVersion)
+		os.Exit(0)
+	}
+
 	if *updateFlag {
-		err := exec.Command("/opt/plum-coding-style/plum_update.sh").Run()
-		if err != nil {
-			log.Fatal(err)
+		if !update.CheckIsUpdateAvailable() {
+			fmt.Println("Plum is up to date")
+			os.Exit(0)
 		}
+		fmt.Println("Updating Plum")
+		update.PlumUpdate()
 		os.Exit(0)
 	}
 
 	if *updateRulesFlag {
-		err := exec.Command("/opt/plum-coding-style/plum_update.sh", "--update-rules").Run()
-		if err != nil {
-			log.Fatal(err)
+		if os.Getuid() != 0 {
+			fmt.Println("Plum need elevated privileges to update rules, restarting using sudo")
+			elevatedCommand := exec.Command("sudo", os.Args[0], "--update-rules")
+			elevatedCommand.Stderr = os.Stderr
+			elevatedCommand.Stdout = os.Stdout
+			elevatedCommand.Stdin = os.Stdin
+			elevatedErr := elevatedCommand.Run()
+			if elevatedErr != nil {
+				errorString := elevatedErr.Error()
+				if strings.HasPrefix(errorString, "exit status ") { // Parse the error message to exit with the correct status
+					errorString = strings.TrimPrefix(errorString, "exit status ")
+					exitStatus, atoiErr := strconv.Atoi(errorString)
+					if atoiErr != nil {
+						log.Fatal(atoiErr)
+					}
+					os.Exit(exitStatus)
+				}
+			}
+			os.Exit(0)
 		}
+		fmt.Println("\nUpdating Rules")
+		update.PlumUpdateRules()
 		os.Exit(0)
 	}
 
