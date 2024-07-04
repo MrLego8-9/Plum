@@ -48,9 +48,13 @@ Usage of plum:
     Update the coding style rules
 ```
 
+Files can be ignored in a git repository using a .gitignore or ignored only by plum using a .plumignore
+
 ## What makes Plum faster than the dockerised version ?
 Plum is faster for several reasons:
  - It doesn't pull the docker image every time you run it
  - It doesn't have to start and remove the docker container
  - The C coding style checker is compiled with optimization flags
- - The C coding style checks are ran in parallel
+ - All coding style checks are parallelized
+
+It is now even faster than before due to a rewrite in Golang !
