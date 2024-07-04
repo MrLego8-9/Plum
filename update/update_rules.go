@@ -1,13 +1,17 @@
 package update
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
+	"syscall"
 )
 
 const updateDirectory = "/tmp/Plum"
 const plumBinaryPos = "/bin/plum"
+const temporaryBinaryPos = "/tmp/Plum/plum"
+const updatePlumBinary = "/tmp/plum-tmp"
 
 const dockerVolumeDirectory = "/tmp/docker-volume"
 const dockerScript = "#!/bin/bash\ncp /usr/local/bin/lambdananas /mounted-dir\ncp -r /usr/local/lib/vera++ /mounted-dir"
@@ -66,13 +70,32 @@ func buildPlumBinary() {
 	if buildErr != nil {
 		log.Fatal("Build plum", buildErr)
 	}
-	movePlumErr := exec.Command("cp", updateDirectory+"/plum", plumBinaryPos).Run()
-	if movePlumErr != nil {
-		log.Fatal("Move plum", movePlumErr)
+}
+
+func switchToTemporaryBinary() {
+	removeErr := os.Remove(updatePlumBinary)
+	if removeErr != nil && !os.IsNotExist(removeErr) {
+		log.Fatal("Remove temporary binary", removeErr)
+	}
+	copyTmpErr := exec.Command("cp", "-f", plumBinaryPos, updatePlumBinary).Run()
+	if copyTmpErr != nil {
+		log.Fatal("copy temporary binary", copyTmpErr)
+	}
+	newArgs := os.Args
+	newArgs[0] = updatePlumBinary
+	// Using execve syscall to replace the current process with the temporary binary,
+	// This avoids the error "file busy" when trying to replace the plum binary
+	execveErr := syscall.Exec(updatePlumBinary, os.Args, os.Environ())
+	if execveErr != nil {
+		log.Fatal("execve", execveErr)
 	}
 }
 
 func PlumUpdateRules() {
+	if os.Args[0] != updatePlumBinary {
+		switchToTemporaryBinary()
+	}
+	fmt.Println("\nUpdating Rules")
 	removeRepoErr := os.RemoveAll(updateDirectory)
 	if removeRepoErr != nil {
 		log.Println("Remove temp repository", removeRepoErr)
@@ -84,16 +107,16 @@ func PlumUpdateRules() {
 	handleDockerInteraction()
 	moveDockerContents()
 	if _, goNotFound := exec.LookPath("go"); goNotFound != nil {
-		removePlumErr := os.Remove(plumBinaryPos)
-		if removePlumErr != nil {
-			log.Fatal("Remove plum", removePlumErr)
-		}
-		downloadErr := downloadPlumBinary(plumBinaryPos)
+		downloadErr := downloadPlumBinary(temporaryBinaryPos)
 		if downloadErr != nil {
 			log.Fatal("Download plum", downloadErr)
 		}
 	} else {
 		buildPlumBinary()
+	}
+	plumCopyErr := exec.Command("cp", temporaryBinaryPos, plumBinaryPos).Run()
+	if plumCopyErr != nil {
+		log.Fatal("Copy plum binary", plumCopyErr)
 	}
 	removeDockerVolumeErr := os.RemoveAll(dockerVolumeDirectory)
 	if removeDockerVolumeErr != nil {

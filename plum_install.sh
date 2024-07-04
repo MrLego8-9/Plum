@@ -76,6 +76,6 @@ else
     echo -e "Go is not installed, downloading prebuilt release"
     wget -O "/tmp/Plum/plum" "https://github.com/MrLego8-9/Plum/releases/latest/download/plum"
 fi
-sudo cp /tmp/Plum/plum /bin/plum
+sudo cp /tmp/Plum/plum /bin/plum || echo "Failed to update plum binary"
 
 sudo rm -rf /tmp/docker-volume/

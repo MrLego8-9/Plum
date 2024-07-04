@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"plum/io"
 	"plum/style"
 	"plum/update"
-	"strconv"
-	"strings"
 	"sync"
+	"syscall"
 )
 
 func runChecks(ignoredDirs, ignoredFiles []string) (io.CheckResult, io.CheckResult) {
@@ -69,27 +67,13 @@ func main() {
 	}
 
 	if *updateRulesFlag {
-		if os.Getuid() != 0 {
+		if os.Getuid() != 0 { // Execve sudo with plum command
 			fmt.Println("Plum need elevated privileges to update rules, restarting using sudo")
-			elevatedCommand := exec.Command("sudo", os.Args[0], "--update-rules")
-			elevatedCommand.Stderr = os.Stderr
-			elevatedCommand.Stdout = os.Stdout
-			elevatedCommand.Stdin = os.Stdin
-			elevatedErr := elevatedCommand.Run()
-			if elevatedErr != nil {
-				errorString := elevatedErr.Error()
-				if strings.HasPrefix(errorString, "exit status ") { // Parse the error message to exit with the correct status
-					errorString = strings.TrimPrefix(errorString, "exit status ")
-					exitStatus, atoiErr := strconv.Atoi(errorString)
-					if atoiErr != nil {
-						log.Fatal(atoiErr)
-					}
-					os.Exit(exitStatus)
-				}
+			execveErr := syscall.Exec("/bin/sudo", append([]string{"/bin/sudo"}, os.Args...), os.Environ())
+			if execveErr != nil {
+				log.Fatal("execve sudo", execveErr)
 			}
-			os.Exit(0)
 		}
-		fmt.Println("\nUpdating Rules")
 		update.PlumUpdateRules()
 		os.Exit(0)
 	}
