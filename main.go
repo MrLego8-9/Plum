@@ -46,6 +46,7 @@ func runChecks(ignoredDirs, ignoredFiles []string) (io.CheckResult, io.CheckResu
 func main() {
 	updateFlag := flag.Bool("update", false, "Update Plum")
 	updateRulesFlag := flag.Bool("update-rules", false, "Update the coding style rules")
+	rebuildVeraFlag := flag.Bool("rebuild-vera", false, "Rebuild vera++")
 	ignoreProcessingFlag := flag.Bool("no-ignore", false, "Do not ignore files in .gitignore and .plumignore")
 	noStatusFlag := flag.Bool("no-status", false, "Always return with exit code 0")
 	versionFlag := flag.Bool("version", false, "Show version")
@@ -66,6 +67,10 @@ func main() {
 		os.Exit(0)
 	}
 
+	if *rebuildVeraFlag {
+		update.RebuildVera()
+	}
+
 	if *updateRulesFlag {
 		if os.Getuid() != 0 { // Execve sudo with plum command
 			fmt.Println("Plum need elevated privileges to update rules, restarting using sudo")
@@ -75,6 +80,9 @@ func main() {
 			}
 		}
 		update.PlumUpdateRules()
+	}
+
+	if *rebuildVeraFlag || *updateRulesFlag { // Exit after rebuild / update task
 		os.Exit(0)
 	}
 

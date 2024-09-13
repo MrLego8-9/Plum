@@ -46,6 +46,8 @@ Usage of plum:
     Update Plum
   --update-rules
     Update the coding style rules
+   --rebuild-vera
+    Rebuild vera++ in case of a dependecy change (eg. boost-libs update)
 ```
 
 Files can be ignored in a git repository using a .gitignore or ignored only by plum using a .plumignore
