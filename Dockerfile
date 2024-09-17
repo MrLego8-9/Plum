@@ -1,6 +1,6 @@
-FROM ubuntu:noble
+FROM ubuntu:jammy
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tcl-dev python3-dev libpython3-dev pylint python3-clang wget sudo
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tcl-dev python3-dev libpython3-dev pylint python3-clang wget sudo
 
 COPY plum.tar.gz /plum.tar.gz
 
