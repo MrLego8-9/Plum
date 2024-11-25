@@ -20,7 +20,7 @@ var veraCmakeFlags = []string{"target_compile_options(vera PRIVATE", "  -Ofast",
 func cloneVera() { // Clone vera repo in /tmp
 	removeVeraErr := os.RemoveAll(veraFolder)
 	if removeVeraErr != nil {
-		log.Fatal("Remove vera tmp directory", removeVeraErr)
+		log.Fatal("Remove vera tmp directory ", removeVeraErr)
 	}
 	cloneVeraErr := exec.Command("git", "clone", veraUrl, veraFolder).Run()
 	if cloneVeraErr != nil {
@@ -47,7 +47,7 @@ func runCommandAsRoot(cmd string, args ...string) *exec.Cmd {
 func addBuildFlags() { // Adds the build flags to the vera Cmake
 	cmakeListsHandleRd, openErr := os.OpenFile(veraCMakeLists, os.O_RDONLY, 0644)
 	if openErr != nil {
-		log.Fatal("open Cmake RD ", openErr)
+		log.Fatal("open Cmake in read-only mode ", openErr)
 	}
 	cmakeStat, statErr := cmakeListsHandleRd.Stat()
 	if statErr != nil {
@@ -61,7 +61,7 @@ func addBuildFlags() { // Adds the build flags to the vera Cmake
 	cmakeString := string(fileBuffer[:bytesRead])
 	closeRdErr := cmakeListsHandleRd.Close()
 	if closeRdErr != nil {
-		log.Fatal("Close Cmake RD ", closeRdErr)
+		log.Fatal("Close Cmake in read-only mode ", closeRdErr)
 	}
 	cmakeLines := strings.Split(cmakeString, "\n")
 	for idx, line := range cmakeLines { // Find line to add the flags to
@@ -77,7 +77,7 @@ func addBuildFlags() { // Adds the build flags to the vera Cmake
 	// Close and reopen the file to clear it, to avoid duplication
 	cmakeListsHandleWr, openWrErr := os.OpenFile(veraCMakeLists, os.O_WRONLY|os.O_TRUNC, 0644)
 	if openWrErr != nil {
-		log.Fatal("open Cmake WR ", openWrErr)
+		log.Fatal("open Cmake write mode ", openWrErr)
 	}
 	bytesWritten, writeErr := cmakeListsHandleWr.Write([]byte(cmakeString))
 	if writeErr != nil {
@@ -88,7 +88,7 @@ func addBuildFlags() { // Adds the build flags to the vera Cmake
 	}
 	closeErr := cmakeListsHandleWr.Close()
 	if closeErr != nil {
-		log.Fatal("Close Cmake Wr ", closeErr)
+		log.Fatal("Close Cmake write mode ", closeErr)
 	}
 }
 
@@ -118,7 +118,7 @@ func RebuildVera() {
 	}
 	removeVeraErr := os.RemoveAll(veraFolder)
 	if removeVeraErr != nil {
-		log.Fatal("Remove vera tmp directory post-build", removeVeraErr)
+		log.Fatal("Remove vera tmp directory post-build ", removeVeraErr)
 	}
 	fmt.Println("\n -> Vera rebuilt successfully")
 }

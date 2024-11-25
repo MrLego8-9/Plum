@@ -139,7 +139,7 @@ func CheckCStyle(ignoredDirs, ignoredFiles []string) (map[string]int, [][]string
 	ignoredDirs = append([]string{"tests", "bonus", ".git"}, ignoredDirs...)
 	includedFiles, err := walkDirectories(ignoredDirs, ignoredFiles)
 	if err != nil {
-		log.Println("Failed to walk dirs for C Coding Style:", err)
+		log.Println("Failed to walk dirs for C Coding Style: ", err)
 		return nil, nil
 	}
 	waitGroup, resultsChannels := startChecks(includedFiles)

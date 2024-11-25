@@ -76,7 +76,7 @@ func main() {
 			fmt.Println("Plum need elevated privileges to update rules, restarting using sudo")
 			execveErr := syscall.Exec("/bin/sudo", append([]string{"/bin/sudo"}, os.Args...), os.Environ())
 			if execveErr != nil {
-				log.Fatal("execve sudo", execveErr)
+				log.Fatal("execve sudo ", execveErr)
 			}
 		}
 		update.PlumUpdateRules()
