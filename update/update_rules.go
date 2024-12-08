@@ -91,6 +91,14 @@ func switchToTemporaryBinary() {
 	}
 }
 
+func RerunWithSudo() {
+	fmt.Println("Plum need elevated privileges to update rules, restarting using sudo")
+	execveErr := syscall.Exec("/bin/sudo", append([]string{"/bin/sudo"}, os.Args...), os.Environ())
+	if execveErr != nil {
+		log.Fatal("execve sudo ", execveErr)
+	}
+}
+
 func PlumUpdateRules() {
 	if os.Args[0] != updatePlumBinary {
 		switchToTemporaryBinary()

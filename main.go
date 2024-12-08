@@ -9,7 +9,6 @@ import (
 	"plum/style"
 	"plum/update"
 	"sync"
-	"syscall"
 )
 
 func runChecks(ignoredDirs, ignoredFiles []string) (io.CheckResult, io.CheckResult) {
@@ -73,11 +72,7 @@ func main() {
 
 	if *updateRulesFlag {
 		if os.Getuid() != 0 { // Execve sudo with plum command
-			fmt.Println("Plum need elevated privileges to update rules, restarting using sudo")
-			execveErr := syscall.Exec("/bin/sudo", append([]string{"/bin/sudo"}, os.Args...), os.Environ())
-			if execveErr != nil {
-				log.Fatal("execve sudo ", execveErr)
-			}
+			update.RerunWithSudo()
 		}
 		update.PlumUpdateRules()
 	}
